@@ -5,6 +5,11 @@
 			"referenceName": "LS_DataLake",
 			"type": "LinkedServiceReference"
 		},
+		"parameters": {
+			"ContainerName": {
+				"type": "String"
+			}
+		},
 		"annotations": [],
 		"type": "DelimitedText",
 		"typeProperties": {
@@ -12,7 +17,10 @@
 				"type": "AzureBlobFSLocation",
 				"fileName": "EuropeCountry.csv",
 				"folderPath": "Europe",
-				"fileSystem": "dev"
+				"fileSystem": {
+					"value": "@dataset().ContainerName",
+					"type": "Expression"
+				}
 			},
 			"columnDelimiter": ",",
 			"escapeChar": "\\",

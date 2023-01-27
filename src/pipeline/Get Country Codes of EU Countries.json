@@ -5,7 +5,14 @@
 			{
 				"name": "Getting data from web to Data Lake",
 				"type": "Copy",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "set ConatinerName Variable",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"policy": {
 					"timeout": "0.12:00:00",
 					"retry": 0,
@@ -70,11 +77,42 @@
 				"outputs": [
 					{
 						"referenceName": "DS_datalake",
-						"type": "DatasetReference"
+						"type": "DatasetReference",
+						"parameters": {
+							"ContainerName": {
+								"value": "@variables('var_containerName')",
+								"type": "Expression"
+							}
+						}
 					}
 				]
+			},
+			{
+				"name": "set ConatinerName Variable",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var_containerName",
+					"value": {
+						"value": "@pipeline().parameters.ContainerName",
+						"type": "Expression"
+					}
+				}
 			}
 		],
+		"parameters": {
+			"ContainerName": {
+				"type": "string",
+				"defaultValue": "Dev"
+			}
+		},
+		"variables": {
+			"var_containerName": {
+				"type": "String",
+				"defaultValue": "Dev"
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2023-01-27T11:24:59Z"
 	},
