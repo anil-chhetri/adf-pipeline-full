@@ -90,41 +90,13 @@
 			{
 				"name": "set ConatinerName Variable",
 				"type": "SetVariable",
-				"dependsOn": [
-					{
-						"activity": "Web1",
-						"dependencyConditions": [
-							"Succeeded"
-						]
-					}
-				],
+				"dependsOn": [],
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "var_containerName",
 					"value": {
-						"value": "@activity('Web1').output.Value",
+						"value": "@pipeline().globalParameters.Environment",
 						"type": "Expression"
-					}
-				}
-			},
-			{
-				"name": "Web1",
-				"type": "WebActivity",
-				"dependsOn": [],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"url": "https://kv-dev-fb.vault.azure.net/secrets/container/54c46791b7b64d4e96abddadd10799a2?api-version=7.0",
-					"method": "GET",
-					"authentication": {
-						"type": "MSI",
-						"resource": "https://vault.azure.net"
 					}
 				}
 			}
