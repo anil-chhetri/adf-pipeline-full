@@ -99,6 +99,26 @@
 						"type": "Expression"
 					}
 				}
+			},
+			{
+				"name": "Create Bronze Layer",
+				"type": "ExecutePipeline",
+				"dependsOn": [
+					{
+						"activity": "Getting data from web to Data Lake",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"pipeline": {
+						"referenceName": "InputData To Bronze Layer",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true
+				}
 			}
 		],
 		"variables": {
