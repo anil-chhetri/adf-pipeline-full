@@ -1,6 +1,6 @@
 {
 	"Environment": {
 		"type": "string",
-		"value": "Dev"
+		"value": "dev"
 	}
 }

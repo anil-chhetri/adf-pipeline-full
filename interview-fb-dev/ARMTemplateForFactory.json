@@ -11,31 +11,7 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_DataLake'"
 		},
-		"LS_bronzeLayer_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_bronzeLayer'"
-		},
-		"LS_inputFolder_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_inputFolder'"
-		},
-		"LS_inputLayer_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_inputLayer'"
-		},
 		"LS_DataLake_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_bronzeLayer_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_inputFolder_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_inputLayer_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
 		},
@@ -45,7 +21,7 @@
 		},
 		"default_properties_Environment_value": {
 			"type": "string",
-			"defaultValue": "Dev"
+			"defaultValue": "dev"
 		}
 	},
 	"variables": {
@@ -156,6 +132,27 @@
 								"type": "Expression"
 							}
 						}
+					},
+					{
+						"name": "Create Bronze Layer",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Getting data from web to Data Lake",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "InputData To Bronze Layer",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
 					}
 				],
 				"policy": {
@@ -172,7 +169,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_webData')]",
-				"[concat(variables('factoryId'), '/datasets/DS_datalake')]"
+				"[concat(variables('factoryId'), '/datasets/DS_datalake')]",
+				"[concat(variables('factoryId'), '/pipelines/InputData To Bronze Layer')]"
 			]
 		},
 		{
@@ -199,7 +197,11 @@
 								"referenceName": "DS_inputLayer",
 								"type": "DatasetReference",
 								"parameters": {
-									"FileName": " "
+									"FileName": " ",
+									"ContainerName": {
+										"value": "@pipeline().globalParameters.Environment",
+										"type": "Expression"
+									}
 								}
 							},
 							"fieldList": [
@@ -271,6 +273,164 @@
 										"enableStaging": false,
 										"translator": {
 											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"name": "record_id",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "record_id",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "customer_type",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "customer_type",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "transaction_date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "transaction_date",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "posting_date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "posting_date",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "transaction_amount",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "transaction_amount",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "Txn_Description",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Txn_Description",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "country",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "country",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "Age_Band",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Age_Band",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "gender",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "gender",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "Transaction_id",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Transaction_id",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "customer_key",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "customer_key",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "customer_postcode",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "customer_postcode",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "Notes",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Notes",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												}
+											],
 											"typeConversion": true,
 											"typeConversionSettings": {
 												"allowDataTruncation": true,
@@ -286,6 +446,10 @@
 												"FileName": {
 													"value": "@item().name",
 													"type": "Expression"
+												},
+												"ContainerName": {
+													"value": "@pipeline().globalParameters.Environment",
+													"type": "Expression"
 												}
 											}
 										}
@@ -294,7 +458,12 @@
 										{
 											"referenceName": "DS_BronzeLayer",
 											"type": "DatasetReference",
-											"parameters": {}
+											"parameters": {
+												"ContainerName": {
+													"value": "@pipeline().globalParameters.Environment",
+													"type": "Expression"
+												}
+											}
 										}
 									]
 								},
@@ -325,6 +494,10 @@
 											"parameters": {
 												"FileName": {
 													"value": "@item().name",
+													"type": "Expression"
+												},
+												"ContainerName": {
+													"value": "@pipeline().globalParameters.Environment",
 													"type": "Expression"
 												}
 											}
@@ -411,8 +584,13 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_bronzeLayer",
+					"referenceName": "LS_DataLake",
 					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ContainerName": {
+						"type": "String"
+					}
 				},
 				"annotations": [],
 				"type": "Parquet",
@@ -420,14 +598,17 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"folderPath": "Bronze",
-						"fileSystem": "dev"
+						"fileSystem": {
+							"value": "@dataset().ContainerName",
+							"type": "Expression"
+						}
 					},
 					"compressionCodec": "snappy"
 				},
 				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_bronzeLayer')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_DataLake')]"
 			]
 		},
 		{
@@ -473,11 +654,14 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_inputLayer",
+					"referenceName": "LS_DataLake",
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
 					"FileName": {
+						"type": "String"
+					},
+					"ContainerName": {
 						"type": "String"
 					}
 				},
@@ -490,10 +674,14 @@
 							"value": "@dataset().FileName",
 							"type": "Expression"
 						},
-						"fileSystem": "dev"
+						"fileSystem": {
+							"value": "@dataset().ContainerName",
+							"type": "Expression"
+						}
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
+					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": [
@@ -539,7 +727,7 @@
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_inputLayer')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_DataLake')]"
 			]
 		},
 		{
@@ -576,57 +764,6 @@
 					"accountKey": {
 						"type": "SecureString",
 						"value": "[parameters('LS_DataLake_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_bronzeLayer')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('LS_bronzeLayer_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('LS_bronzeLayer_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_inputFolder')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('LS_inputFolder_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('LS_inputFolder_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_inputLayer')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('LS_inputLayer_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('LS_inputLayer_accountKey')]"
 					}
 				}
 			},

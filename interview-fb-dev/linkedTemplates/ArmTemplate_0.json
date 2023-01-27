@@ -11,35 +11,11 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_DataLake'"
 		},
-		"LS_bronzeLayer_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_bronzeLayer'"
-		},
-		"LS_inputFolder_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_inputFolder'"
-		},
-		"LS_inputLayer_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_inputLayer'"
-		},
 		"default_properties_Environment_value": {
 			"type": "string",
-			"defaultValue": "Dev"
+			"defaultValue": "dev"
 		},
 		"LS_DataLake_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_bronzeLayer_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_inputFolder_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_inputLayer_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
 		},
@@ -106,57 +82,6 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/LS_bronzeLayer')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('LS_bronzeLayer_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('LS_bronzeLayer_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_inputFolder')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('LS_inputFolder_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('LS_inputFolder_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_inputLayer')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('LS_inputLayer_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('LS_inputLayer_accountKey')]"
-					}
-				}
-			},
-			"dependsOn": []
-		},
-		{
 			"name": "[concat(parameters('factoryName'), '/LS_webdata')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
@@ -187,8 +112,13 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_bronzeLayer",
+					"referenceName": "LS_DataLake",
 					"type": "LinkedServiceReference"
+				},
+				"parameters": {
+					"ContainerName": {
+						"type": "String"
+					}
 				},
 				"annotations": [],
 				"type": "Parquet",
@@ -196,14 +126,17 @@
 					"location": {
 						"type": "AzureBlobFSLocation",
 						"folderPath": "Bronze",
-						"fileSystem": "dev"
+						"fileSystem": {
+							"value": "@dataset().ContainerName",
+							"type": "Expression"
+						}
 					},
 					"compressionCodec": "snappy"
 				},
 				"schema": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_bronzeLayer')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_DataLake')]"
 			]
 		},
 		{
@@ -249,11 +182,14 @@
 			"apiVersion": "2018-06-01",
 			"properties": {
 				"linkedServiceName": {
-					"referenceName": "LS_inputLayer",
+					"referenceName": "LS_DataLake",
 					"type": "LinkedServiceReference"
 				},
 				"parameters": {
 					"FileName": {
+						"type": "String"
+					},
+					"ContainerName": {
 						"type": "String"
 					}
 				},
@@ -266,10 +202,14 @@
 							"value": "@dataset().FileName",
 							"type": "Expression"
 						},
-						"fileSystem": "dev"
+						"fileSystem": {
+							"value": "@dataset().ContainerName",
+							"type": "Expression"
+						}
 					},
 					"columnDelimiter": ",",
 					"escapeChar": "\\",
+					"firstRowAsHeader": true,
 					"quoteChar": "\""
 				},
 				"schema": [
@@ -315,7 +255,7 @@
 				]
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_inputLayer')]"
+				"[concat(variables('factoryId'), '/linkedServices/LS_DataLake')]"
 			]
 		},
 		{
@@ -338,6 +278,387 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_webdata')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/InputData To Bronze Layer')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Get childItems",
+						"description": "Get all the children items of the folder pointed by Dataset.",
+						"type": "GetMetadata",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"dataset": {
+								"referenceName": "DS_inputLayer",
+								"type": "DatasetReference",
+								"parameters": {
+									"FileName": " ",
+									"ContainerName": {
+										"value": "@pipeline().globalParameters.Environment",
+										"type": "Expression"
+									}
+								}
+							},
+							"fieldList": [
+								"childItems",
+								"itemType",
+								"itemName"
+							],
+							"storeSettings": {
+								"type": "AzureBlobFSReadSettings",
+								"recursive": true,
+								"enablePartitionDiscovery": false
+							},
+							"formatSettings": {
+								"type": "DelimitedTextReadSettings"
+							}
+						}
+					},
+					{
+						"name": "Loop through all the files",
+						"type": "ForEach",
+						"dependsOn": [
+							{
+								"activity": "Remove folder from the list",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Remove folder from the list').output.Value",
+								"type": "Expression"
+							},
+							"activities": [
+								{
+									"name": "Input to Bronze Layer",
+									"type": "Copy",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"source": {
+											"type": "DelimitedTextSource",
+											"storeSettings": {
+												"type": "AzureBlobFSReadSettings",
+												"recursive": false,
+												"enablePartitionDiscovery": false
+											},
+											"formatSettings": {
+												"type": "DelimitedTextReadSettings"
+											}
+										},
+										"sink": {
+											"type": "ParquetSink",
+											"storeSettings": {
+												"type": "AzureBlobFSWriteSettings"
+											},
+											"formatSettings": {
+												"type": "ParquetWriteSettings"
+											}
+										},
+										"enableStaging": false,
+										"translator": {
+											"type": "TabularTranslator",
+											"mappings": [
+												{
+													"source": {
+														"name": "record_id",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "record_id",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "customer_type",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "customer_type",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "transaction_date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "transaction_date",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "posting_date",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "posting_date",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "transaction_amount",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "transaction_amount",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "Txn_Description",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Txn_Description",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "country",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "country",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "Age_Band",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Age_Band",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "gender",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "gender",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "Transaction_id",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Transaction_id",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "customer_key",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "customer_key",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "customer_postcode",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "customer_postcode",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												},
+												{
+													"source": {
+														"name": "Notes",
+														"type": "String",
+														"physicalType": "String"
+													},
+													"sink": {
+														"name": "Notes",
+														"type": "String",
+														"physicalType": "UTF8"
+													}
+												}
+											],
+											"typeConversion": true,
+											"typeConversionSettings": {
+												"allowDataTruncation": true,
+												"treatBooleanAsNumber": false
+											}
+										}
+									},
+									"inputs": [
+										{
+											"referenceName": "DS_inputLayer",
+											"type": "DatasetReference",
+											"parameters": {
+												"FileName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"ContainerName": {
+													"value": "@pipeline().globalParameters.Environment",
+													"type": "Expression"
+												}
+											}
+										}
+									],
+									"outputs": [
+										{
+											"referenceName": "DS_BronzeLayer",
+											"type": "DatasetReference",
+											"parameters": {
+												"ContainerName": {
+													"value": "@pipeline().globalParameters.Environment",
+													"type": "Expression"
+												}
+											}
+										}
+									]
+								},
+								{
+									"name": "Delete1",
+									"description": "Delete the existing Input Layer after copying the data to Bronze layer.",
+									"type": "Delete",
+									"dependsOn": [
+										{
+											"activity": "Input to Bronze Layer",
+											"dependencyConditions": [
+												"Succeeded"
+											]
+										}
+									],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataset": {
+											"referenceName": "DS_inputLayer",
+											"type": "DatasetReference",
+											"parameters": {
+												"FileName": {
+													"value": "@item().name",
+													"type": "Expression"
+												},
+												"ContainerName": {
+													"value": "@pipeline().globalParameters.Environment",
+													"type": "Expression"
+												}
+											}
+										},
+										"enableLogging": false,
+										"storeSettings": {
+											"type": "AzureBlobFSReadSettings",
+											"recursive": false,
+											"enablePartitionDiscovery": false
+										}
+									}
+								}
+							]
+						}
+					},
+					{
+						"name": "Remove folder from the list",
+						"type": "Filter",
+						"dependsOn": [
+							{
+								"activity": "Get childItems",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"items": {
+								"value": "@activity('Get childItems').output.childItems",
+								"type": "Expression"
+							},
+							"condition": {
+								"value": "@equals(item().type, 'File')",
+								"type": "Expression"
+							}
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"variables": {
+					"fileName": {
+						"type": "String"
+					}
+				},
+				"annotations": [],
+				"lastPublishTime": "2023-01-27T12:10:45Z"
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/datasets/DS_inputLayer')]",
+				"[concat(variables('factoryId'), '/datasets/DS_BronzeLayer')]"
 			]
 		},
 		{
@@ -444,6 +765,27 @@
 								"type": "Expression"
 							}
 						}
+					},
+					{
+						"name": "Create Bronze Layer",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Getting data from web to Data Lake",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "InputData To Bronze Layer",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {}
+						}
 					}
 				],
 				"policy": {
@@ -460,213 +802,8 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_webData')]",
-				"[concat(variables('factoryId'), '/datasets/DS_datalake')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/InputData To Bronze Layer')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Get childItems",
-						"description": "Get all the children items of the folder pointed by Dataset.",
-						"type": "GetMetadata",
-						"dependsOn": [],
-						"policy": {
-							"timeout": "0.12:00:00",
-							"retry": 0,
-							"retryIntervalInSeconds": 30,
-							"secureOutput": false,
-							"secureInput": false
-						},
-						"userProperties": [],
-						"typeProperties": {
-							"dataset": {
-								"referenceName": "DS_inputLayer",
-								"type": "DatasetReference",
-								"parameters": {
-									"FileName": " "
-								}
-							},
-							"fieldList": [
-								"childItems",
-								"itemType",
-								"itemName"
-							],
-							"storeSettings": {
-								"type": "AzureBlobFSReadSettings",
-								"recursive": true,
-								"enablePartitionDiscovery": false
-							},
-							"formatSettings": {
-								"type": "DelimitedTextReadSettings"
-							}
-						}
-					},
-					{
-						"name": "Loop through all the files",
-						"type": "ForEach",
-						"dependsOn": [
-							{
-								"activity": "Remove folder from the list",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Remove folder from the list').output.Value",
-								"type": "Expression"
-							},
-							"activities": [
-								{
-									"name": "Input to Bronze Layer",
-									"type": "Copy",
-									"dependsOn": [],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"source": {
-											"type": "DelimitedTextSource",
-											"storeSettings": {
-												"type": "AzureBlobFSReadSettings",
-												"recursive": false,
-												"enablePartitionDiscovery": false
-											},
-											"formatSettings": {
-												"type": "DelimitedTextReadSettings"
-											}
-										},
-										"sink": {
-											"type": "ParquetSink",
-											"storeSettings": {
-												"type": "AzureBlobFSWriteSettings"
-											},
-											"formatSettings": {
-												"type": "ParquetWriteSettings"
-											}
-										},
-										"enableStaging": false,
-										"translator": {
-											"type": "TabularTranslator",
-											"typeConversion": true,
-											"typeConversionSettings": {
-												"allowDataTruncation": true,
-												"treatBooleanAsNumber": false
-											}
-										}
-									},
-									"inputs": [
-										{
-											"referenceName": "DS_inputLayer",
-											"type": "DatasetReference",
-											"parameters": {
-												"FileName": {
-													"value": "@item().name",
-													"type": "Expression"
-												}
-											}
-										}
-									],
-									"outputs": [
-										{
-											"referenceName": "DS_BronzeLayer",
-											"type": "DatasetReference",
-											"parameters": {}
-										}
-									]
-								},
-								{
-									"name": "Delete1",
-									"description": "Delete the existing Input Layer after copying the data to Bronze layer.",
-									"type": "Delete",
-									"dependsOn": [
-										{
-											"activity": "Input to Bronze Layer",
-											"dependencyConditions": [
-												"Succeeded"
-											]
-										}
-									],
-									"policy": {
-										"timeout": "0.12:00:00",
-										"retry": 0,
-										"retryIntervalInSeconds": 30,
-										"secureOutput": false,
-										"secureInput": false
-									},
-									"userProperties": [],
-									"typeProperties": {
-										"dataset": {
-											"referenceName": "DS_inputLayer",
-											"type": "DatasetReference",
-											"parameters": {
-												"FileName": {
-													"value": "@item().name",
-													"type": "Expression"
-												}
-											}
-										},
-										"enableLogging": false,
-										"storeSettings": {
-											"type": "AzureBlobFSReadSettings",
-											"recursive": false,
-											"enablePartitionDiscovery": false
-										}
-									}
-								}
-							]
-						}
-					},
-					{
-						"name": "Remove folder from the list",
-						"type": "Filter",
-						"dependsOn": [
-							{
-								"activity": "Get childItems",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
-						"userProperties": [],
-						"typeProperties": {
-							"items": {
-								"value": "@activity('Get childItems').output.childItems",
-								"type": "Expression"
-							},
-							"condition": {
-								"value": "@equals(item().type, 'File')",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"variables": {
-					"fileName": {
-						"type": "String"
-					}
-				},
-				"annotations": [],
-				"lastPublishTime": "2023-01-27T12:10:45Z"
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/DS_inputLayer')]",
-				"[concat(variables('factoryId'), '/datasets/DS_BronzeLayer')]"
+				"[concat(variables('factoryId'), '/datasets/DS_datalake')]",
+				"[concat(variables('factoryId'), '/pipelines/InputData To Bronze Layer')]"
 			]
 		}
 	]

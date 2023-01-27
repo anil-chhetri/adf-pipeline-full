@@ -11,31 +11,7 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_DataLake'"
 		},
-		"LS_bronzeLayer_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_bronzeLayer'"
-		},
-		"LS_inputFolder_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_inputFolder'"
-		},
-		"LS_inputLayer_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_inputLayer'"
-		},
 		"LS_DataLake_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_bronzeLayer_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_inputFolder_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_inputLayer_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
 		},
@@ -45,7 +21,7 @@
 		},
 		"default_properties_Environment_value": {
 			"type": "string",
-			"defaultValue": "Dev"
+			"defaultValue": "dev"
 		},
 		"containerUri": {
 			"type": "string",
@@ -77,29 +53,11 @@
 					"LS_DataLake_accountKey": {
 						"value": "[parameters('LS_DataLake_accountKey')]"
 					},
-					"LS_bronzeLayer_accountKey": {
-						"value": "[parameters('LS_bronzeLayer_accountKey')]"
-					},
-					"LS_inputFolder_accountKey": {
-						"value": "[parameters('LS_inputFolder_accountKey')]"
-					},
-					"LS_inputLayer_accountKey": {
-						"value": "[parameters('LS_inputLayer_accountKey')]"
-					},
 					"default_properties_Environment_value": {
 						"value": "[parameters('default_properties_Environment_value')]"
 					},
 					"LS_DataLake_properties_typeProperties_url": {
 						"value": "[parameters('LS_DataLake_properties_typeProperties_url')]"
-					},
-					"LS_bronzeLayer_properties_typeProperties_url": {
-						"value": "[parameters('LS_bronzeLayer_properties_typeProperties_url')]"
-					},
-					"LS_inputFolder_properties_typeProperties_url": {
-						"value": "[parameters('LS_inputFolder_properties_typeProperties_url')]"
-					},
-					"LS_inputLayer_properties_typeProperties_url": {
-						"value": "[parameters('LS_inputLayer_properties_typeProperties_url')]"
 					},
 					"LS_webdata_properties_typeProperties_url": {
 						"value": "[parameters('LS_webdata_properties_typeProperties_url')]"

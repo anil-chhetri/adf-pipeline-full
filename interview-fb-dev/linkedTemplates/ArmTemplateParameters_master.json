@@ -8,32 +8,14 @@
 		"LS_DataLake_accountKey": {
 			"value": ""
 		},
-		"LS_bronzeLayer_accountKey": {
-			"value": ""
-		},
-		"LS_inputFolder_accountKey": {
-			"value": ""
-		},
-		"LS_inputLayer_accountKey": {
-			"value": ""
-		},
 		"LS_DataLake_properties_typeProperties_url": {
-			"value": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_bronzeLayer_properties_typeProperties_url": {
-			"value": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_inputFolder_properties_typeProperties_url": {
-			"value": "https://datastoresfd.dfs.core.windows.net/"
-		},
-		"LS_inputLayer_properties_typeProperties_url": {
 			"value": "https://datastoresfd.dfs.core.windows.net/"
 		},
 		"LS_webdata_properties_typeProperties_url": {
 			"value": "https://restcountries.com/v3.1/region/europe"
 		},
 		"default_properties_Environment_value": {
-			"value": "Dev"
+			"value": "dev"
 		},
 		"containerUri": {
 			"value": ""
