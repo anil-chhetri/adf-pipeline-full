@@ -21,7 +21,7 @@
 		},
 		"default_properties_Environment_value": {
 			"type": "string",
-			"defaultValue": "dev"
+			"defaultValue": "uat"
 		},
 		"containerUri": {
 			"type": "string",

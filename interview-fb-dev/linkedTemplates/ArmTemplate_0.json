@@ -13,7 +13,7 @@
 		},
 		"default_properties_Environment_value": {
 			"type": "string",
-			"defaultValue": "dev"
+			"defaultValue": "uat"
 		},
 		"LS_DataLake_properties_typeProperties_url": {
 			"type": "string",
@@ -306,7 +306,7 @@
 								"parameters": {
 									"FileName": " ",
 									"ContainerName": {
-										"value": "@pipeline().globalParameters.Environment",
+										"value": "@pipeline().parameters.ContainerName",
 										"type": "Expression"
 									}
 								}
@@ -555,7 +555,7 @@
 													"type": "Expression"
 												},
 												"ContainerName": {
-													"value": "@pipeline().globalParameters.Environment",
+													"value": "@pipeline().parameters.ContainerName",
 													"type": "Expression"
 												}
 											}
@@ -567,7 +567,7 @@
 											"type": "DatasetReference",
 											"parameters": {
 												"ContainerName": {
-													"value": "@pipeline().globalParameters.Environment",
+													"value": "@pipeline().parameters.ContainerName",
 													"type": "Expression"
 												}
 											}
@@ -647,6 +647,11 @@
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"parameters": {
+					"ContainerName": {
+						"type": "string"
+					}
 				},
 				"variables": {
 					"fileName": {
@@ -784,7 +789,12 @@
 								"type": "PipelineReference"
 							},
 							"waitOnCompletion": true,
-							"parameters": {}
+							"parameters": {
+								"ContainerName": {
+									"value": "@variables('var_containerName')",
+									"type": "Expression"
+								}
+							}
 						}
 					}
 				],

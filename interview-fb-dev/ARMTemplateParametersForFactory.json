@@ -15,7 +15,7 @@
 			"value": "https://restcountries.com/v3.1/region/europe"
 		},
 		"default_properties_Environment_value": {
-			"value": "dev"
+			"value": "uat"
 		}
 	}
 }
