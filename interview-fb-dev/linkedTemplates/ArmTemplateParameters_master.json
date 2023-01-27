@@ -32,6 +32,9 @@
 		"LS_webdata_properties_typeProperties_url": {
 			"value": "https://restcountries.com/v3.1/region/europe"
 		},
+		"default_properties_Environment_value": {
+			"value": "Dev"
+		},
 		"containerUri": {
 			"value": ""
 		},
