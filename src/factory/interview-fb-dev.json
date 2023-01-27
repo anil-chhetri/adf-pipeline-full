@@ -1,0 +1,9 @@
+{
+	"name": "interview-fb-dev",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "cf178c84-97c9-402c-9404-3211f4e98130",
+		"tenantId": "a085950c-4c25-44d5-945a-b852fa44a221"
+	}
+}

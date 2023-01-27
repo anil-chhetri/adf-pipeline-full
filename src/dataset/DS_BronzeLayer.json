@@ -1,0 +1,21 @@
+{
+	"name": "DS_BronzeLayer",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_bronzeLayer",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "Parquet",
+		"typeProperties": {
+			"location": {
+				"type": "AzureBlobFSLocation",
+				"folderPath": "Bronze",
+				"fileSystem": "dev"
+			},
+			"compressionCodec": "snappy"
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}

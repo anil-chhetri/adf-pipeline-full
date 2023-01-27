@@ -1,0 +1,6 @@
+{
+	"name": "webRunTime",
+	"properties": {
+		"type": "SelfHosted"
+	}
+}
