@@ -2,8 +2,13 @@
 	"name": "DS_BronzeLayer",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_bronzeLayer",
+			"referenceName": "LS_DataLake",
 			"type": "LinkedServiceReference"
+		},
+		"parameters": {
+			"ContainerName": {
+				"type": "String"
+			}
 		},
 		"annotations": [],
 		"type": "Parquet",
@@ -11,7 +16,10 @@
 			"location": {
 				"type": "AzureBlobFSLocation",
 				"folderPath": "Bronze",
-				"fileSystem": "dev"
+				"fileSystem": {
+					"value": "@dataset().ContainerName",
+					"type": "Expression"
+				}
 			},
 			"compressionCodec": "snappy"
 		},

@@ -2,7 +2,7 @@
 	"name": "DS_inputLayer",
 	"properties": {
 		"linkedServiceName": {
-			"referenceName": "LS_inputLayer",
+			"referenceName": "LS_DataLake",
 			"type": "LinkedServiceReference"
 		},
 		"parameters": {

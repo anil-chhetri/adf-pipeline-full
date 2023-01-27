@@ -280,7 +280,13 @@
 							"outputs": [
 								{
 									"referenceName": "DS_BronzeLayer",
-									"type": "DatasetReference"
+									"type": "DatasetReference",
+									"parameters": {
+										"ContainerName": {
+											"value": "@pipeline().globalParameters.Environment",
+											"type": "Expression"
+										}
+									}
 								}
 							]
 						},
