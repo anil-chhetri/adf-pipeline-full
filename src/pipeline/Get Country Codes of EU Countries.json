@@ -117,7 +117,13 @@
 						"referenceName": "InputData To Bronze Layer",
 						"type": "PipelineReference"
 					},
-					"waitOnCompletion": true
+					"waitOnCompletion": true,
+					"parameters": {
+						"ContainerName": {
+							"value": "@variables('var_containerName')",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
