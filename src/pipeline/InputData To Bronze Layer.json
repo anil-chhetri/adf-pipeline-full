@@ -20,7 +20,11 @@
 						"referenceName": "DS_inputLayer",
 						"type": "DatasetReference",
 						"parameters": {
-							"FileName": " "
+							"FileName": " ",
+							"ContainerName": {
+								"value": "@pipeline().globalParameters.Environment",
+								"type": "Expression"
+							}
 						}
 					},
 					"fieldList": [
@@ -92,6 +96,164 @@
 								"enableStaging": false,
 								"translator": {
 									"type": "TabularTranslator",
+									"mappings": [
+										{
+											"source": {
+												"name": "record_id",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "record_id",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "customer_type",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "customer_type",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "transaction_date",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "transaction_date",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "posting_date",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "posting_date",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "transaction_amount",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "transaction_amount",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "Txn_Description",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Txn_Description",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "country",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "country",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "Age_Band",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Age_Band",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "gender",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "gender",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "Transaction_id",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Transaction_id",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "customer_key",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "customer_key",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "customer_postcode",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "customer_postcode",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										},
+										{
+											"source": {
+												"name": "Notes",
+												"type": "String",
+												"physicalType": "String"
+											},
+											"sink": {
+												"name": "Notes",
+												"type": "String",
+												"physicalType": "UTF8"
+											}
+										}
+									],
 									"typeConversion": true,
 									"typeConversionSettings": {
 										"allowDataTruncation": true,
@@ -106,6 +268,10 @@
 									"parameters": {
 										"FileName": {
 											"value": "@item().name",
+											"type": "Expression"
+										},
+										"ContainerName": {
+											"value": "@pipeline().globalParameters.Environment",
 											"type": "Expression"
 										}
 									}
@@ -145,6 +311,10 @@
 									"parameters": {
 										"FileName": {
 											"value": "@item().name",
+											"type": "Expression"
+										},
+										"ContainerName": {
+											"value": "@pipeline().globalParameters.Environment",
 											"type": "Expression"
 										}
 									}
