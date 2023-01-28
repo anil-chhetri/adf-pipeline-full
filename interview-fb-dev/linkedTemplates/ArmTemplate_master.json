@@ -15,10 +15,6 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_AzureDatabricks'"
 		},
-		"LS_delta_table_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_delta_table'"
-		},
 		"LS_SQL_database_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_SQL_database'"
@@ -35,13 +31,13 @@
 			"type": "string",
 			"defaultValue": "0127-134427-xdty1m2"
 		},
-		"LS_delta_table_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
-		},
 		"default_properties_Environment_value": {
 			"type": "string",
-			"defaultValue": "uat"
+			"defaultValue": "dev"
+		},
+		"default_properties_StorageAccount_value": {
+			"type": "string",
+			"defaultValue": "datastoresfd"
 		},
 		"containerUri": {
 			"type": "string",
@@ -76,14 +72,14 @@
 					"LS_AzureDatabricks_accessToken": {
 						"value": "[parameters('LS_AzureDatabricks_accessToken')]"
 					},
-					"LS_delta_table_accountKey": {
-						"value": "[parameters('LS_delta_table_accountKey')]"
-					},
 					"LS_SQL_database_connectionString": {
 						"value": "[parameters('LS_SQL_database_connectionString')]"
 					},
 					"default_properties_Environment_value": {
 						"value": "[parameters('default_properties_Environment_value')]"
+					},
+					"default_properties_StorageAccount_value": {
+						"value": "[parameters('default_properties_StorageAccount_value')]"
 					},
 					"LS_DataLake_properties_typeProperties_url": {
 						"value": "[parameters('LS_DataLake_properties_typeProperties_url')]"
@@ -93,9 +89,6 @@
 					},
 					"LS_AzureDatabricks_properties_typeProperties_existingClusterId": {
 						"value": "[parameters('LS_AzureDatabricks_properties_typeProperties_existingClusterId')]"
-					},
-					"LS_delta_table_properties_typeProperties_url": {
-						"value": "[parameters('LS_delta_table_properties_typeProperties_url')]"
 					}
 				}
 			},

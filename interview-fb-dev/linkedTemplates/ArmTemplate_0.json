@@ -15,17 +15,17 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accessToken' of 'LS_AzureDatabricks'"
 		},
-		"LS_delta_table_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_delta_table'"
-		},
 		"LS_SQL_database_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_SQL_database'"
 		},
 		"default_properties_Environment_value": {
 			"type": "string",
-			"defaultValue": "uat"
+			"defaultValue": "dev"
+		},
+		"default_properties_StorageAccount_value": {
+			"type": "string",
+			"defaultValue": "datastoresfd"
 		},
 		"LS_DataLake_properties_typeProperties_url": {
 			"type": "string",
@@ -38,10 +38,6 @@
 		"LS_AzureDatabricks_properties_typeProperties_existingClusterId": {
 			"type": "string",
 			"defaultValue": "0127-134427-xdty1m2"
-		},
-		"LS_delta_table_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
 		}
 	},
 	"variables": {
@@ -56,6 +52,10 @@
 				"Environment": {
 					"type": "string",
 					"value": "[parameters('default_properties_Environment_value')]"
+				},
+				"StorageAccount": {
+					"type": "string",
+					"value": "[parameters('default_properties_StorageAccount_value')]"
 				}
 			},
 			"dependsOn": []
@@ -116,23 +116,6 @@
 						"value": "[parameters('LS_AzureDatabricks_accessToken')]"
 					},
 					"existingClusterId": "[parameters('LS_AzureDatabricks_properties_typeProperties_existingClusterId')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/LS_delta_table')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('LS_delta_table_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('LS_delta_table_accountKey')]"
-					}
 				}
 			},
 			"dependsOn": []
@@ -768,7 +751,7 @@
 					"sources": [
 						{
 							"linkedService": {
-								"referenceName": "LS_delta_table",
+								"referenceName": "LS_DataLake",
 								"type": "LinkedServiceReference"
 							},
 							"name": "source1"
@@ -828,7 +811,7 @@
 				}
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_delta_table')]",
+				"[concat(variables('factoryId'), '/linkedServices/LS_DataLake')]",
 				"[concat(variables('factoryId'), '/datasets/Azuresqltable')]"
 			]
 		},
@@ -1054,7 +1037,14 @@
 					{
 						"name": "set ConatinerName Variable",
 						"type": "SetVariable",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Set StorageAccount Name",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "var_containerName",
@@ -1114,9 +1104,22 @@
 									"type": "Expression"
 								},
 								"storageName": {
-									"value": "@pipeline().parameters.StorageName",
+									"value": "@pipeline().globalParameters.StorageAccount",
 									"type": "Expression"
 								}
+							}
+						}
+					},
+					{
+						"name": "Set StorageAccount Name",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var_storageAccountName",
+							"value": {
+								"value": "@pipeline().globalParameters.StorageAccount",
+								"type": "Expression"
 							}
 						}
 					}
@@ -1125,13 +1128,11 @@
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
 				},
-				"parameters": {
-					"StorageName": {
-						"type": "string"
-					}
-				},
 				"variables": {
 					"var_containerName": {
+						"type": "String"
+					},
+					"var_storageAccountName": {
 						"type": "String"
 					}
 				},
