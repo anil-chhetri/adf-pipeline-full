@@ -1,0 +1,16 @@
+{
+	"name": "Azuresqltable",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQL_database",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "InputDataTest"
+		}
+	}
+}
