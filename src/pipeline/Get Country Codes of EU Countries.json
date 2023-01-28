@@ -127,119 +127,6 @@
 				}
 			},
 			{
-				"name": "Log Error",
-				"type": "Copy",
-				"dependsOn": [
-					{
-						"activity": "set ConatinerName Variable",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "Getting data from web to Data Lake",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "Create Bronze Layer",
-						"dependencyConditions": [
-							"Failed"
-						]
-					},
-					{
-						"activity": "Execute Silver layer",
-						"dependencyConditions": [
-							"Failed"
-						]
-					}
-				],
-				"policy": {
-					"timeout": "0.12:00:00",
-					"retry": 0,
-					"retryIntervalInSeconds": 30,
-					"secureOutput": false,
-					"secureInput": false
-				},
-				"userProperties": [],
-				"typeProperties": {
-					"source": {
-						"type": "DelimitedTextSource",
-						"additionalColumns": [
-							{
-								"name": "Date",
-								"value": {
-									"value": "@utcnow()",
-									"type": "Expression"
-								}
-							},
-							{
-								"name": "PipelineName",
-								"value": {
-									"value": "@pipeline().Pipeline",
-									"type": "Expression"
-								}
-							},
-							{
-								"name": "factoryName",
-								"value": {
-									"value": "@pipeline().DataFactory",
-									"type": "Expression"
-								}
-							}
-						],
-						"storeSettings": {
-							"type": "AzureBlobFSReadSettings",
-							"recursive": true,
-							"enablePartitionDiscovery": false
-						},
-						"formatSettings": {
-							"type": "DelimitedTextReadSettings"
-						}
-					},
-					"sink": {
-						"type": "DelimitedTextSink",
-						"storeSettings": {
-							"type": "AzureBlobFSWriteSettings",
-							"copyBehavior": "MergeFiles"
-						},
-						"formatSettings": {
-							"type": "DelimitedTextWriteSettings",
-							"quoteAllText": true,
-							"fileExtension": ".txt"
-						}
-					},
-					"enableStaging": false,
-					"translator": {
-						"type": "TabularTranslator",
-						"typeConversion": true,
-						"typeConversionSettings": {
-							"allowDataTruncation": true,
-							"treatBooleanAsNumber": false
-						}
-					}
-				},
-				"inputs": [
-					{
-						"referenceName": "DS_datalake",
-						"type": "DatasetReference",
-						"parameters": {
-							"ContainerName": {
-								"value": "@pipeline().globalParameters.Environment",
-								"type": "Expression"
-							}
-						}
-					}
-				],
-				"outputs": [
-					{
-						"referenceName": "DelimitedText1",
-						"type": "DatasetReference"
-					}
-				]
-			},
-			{
 				"name": "Execute Silver layer",
 				"type": "ExecutePipeline",
 				"dependsOn": [
@@ -252,10 +139,25 @@
 				],
 				"userProperties": [],
 				"typeProperties": {
-					"waitOnCompletion": true
+					"pipeline": {
+						"referenceName": "Silver Layer",
+						"type": "PipelineReference"
+					},
+					"waitOnCompletion": true,
+					"parameters": {
+						"containerName": {
+							"value": "@variables('var_containerName')",
+							"type": "Expression"
+						}
+					}
 				}
 			}
 		],
+		"parameters": {
+			"StorageName": {
+				"type": "string"
+			}
+		},
 		"variables": {
 			"var_containerName": {
 				"type": "String"
