@@ -8,11 +8,26 @@
 		"LS_DataLake_accountKey": {
 			"value": ""
 		},
+		"LS_AzureDatabricks_accessToken": {
+			"value": ""
+		},
+		"LS_delta_table_accountKey": {
+			"value": ""
+		},
+		"LS_SQL_database_connectionString": {
+			"value": ""
+		},
 		"LS_DataLake_properties_typeProperties_url": {
 			"value": "https://datastoresfd.dfs.core.windows.net/"
 		},
 		"LS_webdata_properties_typeProperties_url": {
 			"value": "https://restcountries.com/v3.1/region/europe"
+		},
+		"LS_AzureDatabricks_properties_typeProperties_existingClusterId": {
+			"value": "0127-134427-xdty1m2"
+		},
+		"LS_delta_table_properties_typeProperties_url": {
+			"value": "https://datastoresfd.dfs.core.windows.net/"
 		},
 		"default_properties_Environment_value": {
 			"value": "uat"

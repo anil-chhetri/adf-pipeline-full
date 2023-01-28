@@ -11,6 +11,18 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'accountKey' of 'LS_DataLake'"
 		},
+		"LS_AzureDatabricks_accessToken": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accessToken' of 'LS_AzureDatabricks'"
+		},
+		"LS_delta_table_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_delta_table'"
+		},
+		"LS_SQL_database_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQL_database'"
+		},
 		"default_properties_Environment_value": {
 			"type": "string",
 			"defaultValue": "uat"
@@ -22,6 +34,14 @@
 		"LS_webdata_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://restcountries.com/v3.1/region/europe"
+		},
+		"LS_AzureDatabricks_properties_typeProperties_existingClusterId": {
+			"type": "string",
+			"defaultValue": "0127-134427-xdty1m2"
+		},
+		"LS_delta_table_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
 		}
 	},
 	"variables": {
@@ -37,30 +57,6 @@
 					"type": "string",
 					"value": "[parameters('default_properties_Environment_value')]"
 				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/Silver Layer')]",
-			"type": "Microsoft.DataFactory/factories/pipelines",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"activities": [
-					{
-						"name": "Wait1",
-						"type": "Wait",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"waitTimeInSeconds": 1
-						}
-					}
-				],
-				"policy": {
-					"elapsedTimeMetric": {},
-					"cancelAfter": {}
-				},
-				"annotations": []
 			},
 			"dependsOn": []
 		},
@@ -103,6 +99,54 @@
 			"properties": {
 				"type": "SelfHosted",
 				"typeProperties": {}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_AzureDatabricks')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureDatabricks",
+				"typeProperties": {
+					"domain": "https://adb-7002924921230225.5.azuredatabricks.net",
+					"accessToken": {
+						"type": "SecureString",
+						"value": "[parameters('LS_AzureDatabricks_accessToken')]"
+					},
+					"existingClusterId": "[parameters('LS_AzureDatabricks_properties_typeProperties_existingClusterId')]"
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_delta_table')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureBlobFS",
+				"typeProperties": {
+					"url": "[parameters('LS_delta_table_properties_typeProperties_url')]",
+					"accountKey": {
+						"type": "SecureString",
+						"value": "[parameters('LS_delta_table_accountKey')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/LS_SQL_database')]",
+			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"annotations": [],
+				"type": "AzureSqlDatabase",
+				"typeProperties": {
+					"connectionString": "[parameters('LS_SQL_database_connectionString')]"
+				}
 			},
 			"dependsOn": []
 		},
@@ -278,6 +322,54 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_webdata')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_DataLake",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "DelimitedText",
+				"typeProperties": {
+					"location": {
+						"type": "AzureBlobFSLocation",
+						"fileSystem": "uat"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_DataLake')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Azuresqltable')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"linkedServiceName": {
+					"referenceName": "LS_SQL_database",
+					"type": "LinkedServiceReference"
+				},
+				"annotations": [],
+				"type": "AzureSqlTable",
+				"schema": [],
+				"typeProperties": {
+					"schema": "dbo",
+					"table": "inputTestData"
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_SQL_database')]"
 			]
 		},
 		{
@@ -667,6 +759,207 @@
 			]
 		},
 		{
+			"name": "[concat(parameters('factoryName'), '/SilverLayerToSQLTable')]",
+			"type": "Microsoft.DataFactory/factories/dataflows",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"type": "MappingDataFlow",
+				"typeProperties": {
+					"sources": [
+						{
+							"linkedService": {
+								"referenceName": "LS_delta_table",
+								"type": "LinkedServiceReference"
+							},
+							"name": "source1"
+						}
+					],
+					"sinks": [
+						{
+							"dataset": {
+								"referenceName": "Azuresqltable",
+								"type": "DatasetReference"
+							},
+							"name": "sink1"
+						}
+					],
+					"transformations": [],
+					"scriptLines": [
+						"parameters{",
+						"     ContainerName as string (\"uat\")",
+						"}",
+						"source(output(",
+						"          File_date as date,",
+						"          record_id as string,",
+						"          customer_type as string,",
+						"          transaction_date as date,",
+						"          posting_date as date,",
+						"          transaction_amount as string,",
+						"          Description_text as string,",
+						"          original_description_text as string,",
+						"          country_code as string,",
+						"          EU_flag as integer,",
+						"          age_band as string,",
+						"          gender_code as string,",
+						"          transaction_id as string,",
+						"          customer_key as string,",
+						"          post_code as string,",
+						"          note_text as string",
+						"     ),",
+						"     allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     ignoreNoFilesFound: false,",
+						"     format: 'delta',",
+						"     fileSystem: 'uat',",
+						"     folderPath: 'Silver') ~> source1",
+						"source1 sink(allowSchemaDrift: true,",
+						"     validateSchema: false,",
+						"     deletable:false,",
+						"     insertable:true,",
+						"     updateable:false,",
+						"     upsertable:false,",
+						"     format: 'table',",
+						"     batchSize: 5000,",
+						"     preSQLs:['drop table if exists dbo.inputTestData\\ncreate table dbo.inputTestData\\n(\\n     file_date date\\n     , record_id nvarchar(100)\\n     , customer_type nvarchar(100)\\n     , transaction_date date\\n     , posting_date date\\n     , transaction_amount nvarchar(100)\\n     , description_text nvarchar(100)\\n     , original_description_text nvarchar(100)\\n     , country_code nvarchar(4)\\n     , EU_flag int\\n     , age_band nvarchar(10)\\n     , gender_code nvarchar(1)\\n     , transaction_id nvarchar(50)\\n     , customer_key nvarchar(50)\\n     , post_code nvarchar(10)\\n     , note_text nvarchar(50)\\n)'],",
+						"     skipDuplicateMapInputs: true,",
+						"     skipDuplicateMapOutputs: true,",
+						"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
+					]
+				}
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_delta_table')]",
+				"[concat(variables('factoryId'), '/datasets/Azuresqltable')]"
+			]
+		},
+		{
+			"name": "[concat(parameters('factoryName'), '/Silver Layer')]",
+			"type": "Microsoft.DataFactory/factories/pipelines",
+			"apiVersion": "2018-06-01",
+			"properties": {
+				"activities": [
+					{
+						"name": "Notebook1",
+						"type": "DatabricksNotebook",
+						"dependsOn": [],
+						"policy": {
+							"timeout": "0.12:00:00",
+							"retry": 0,
+							"retryIntervalInSeconds": 30,
+							"secureOutput": false,
+							"secureInput": false
+						},
+						"userProperties": [],
+						"typeProperties": {
+							"notebookPath": "/Users/220282033@aston.ac.uk/SilverLayer",
+							"baseParameters": {
+								"containerName": {
+									"value": "@pipeline().parameters.containerName",
+									"type": "Expression"
+								},
+								"storageAccountName": {
+									"value": "@pipeline().parameters.storageName",
+									"type": "Expression"
+								}
+							}
+						},
+						"linkedServiceName": {
+							"referenceName": "LS_AzureDatabricks",
+							"type": "LinkedServiceReference"
+						}
+					},
+					{
+						"name": "If Condition1",
+						"type": "IfCondition",
+						"dependsOn": [
+							{
+								"activity": "Notebook1",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"expression": {
+								"value": "@equals(activity('Notebook1').output.runOutput.success, 0)",
+								"type": "Expression"
+							},
+							"ifFalseActivities": [
+								{
+									"name": "Load to final table",
+									"type": "ExecuteDataFlow",
+									"dependsOn": [],
+									"policy": {
+										"timeout": "0.12:00:00",
+										"retry": 0,
+										"retryIntervalInSeconds": 30,
+										"secureOutput": false,
+										"secureInput": false
+									},
+									"userProperties": [],
+									"typeProperties": {
+										"dataflow": {
+											"referenceName": "SilverLayerToSQLTable",
+											"type": "DataFlowReference",
+											"parameters": {
+												"ContainerName": "\"uat\""
+											},
+											"datasetParameters": {
+												"source1": {},
+												"sink1": {}
+											},
+											"linkedServiceParameters": {}
+										},
+										"staging": {},
+										"compute": {
+											"coreCount": 8,
+											"computeType": "General"
+										},
+										"traceLevel": "Fine"
+									}
+								}
+							],
+							"ifTrueActivities": [
+								{
+									"name": "Something went wrong in Notebook",
+									"type": "Fail",
+									"dependsOn": [],
+									"userProperties": [],
+									"typeProperties": {
+										"message": {
+											"value": "@join(activity('Notebook1').output.runOutput.errorMessage, ',')",
+											"type": "Expression"
+										},
+										"errorCode": "1"
+									}
+								}
+							]
+						}
+					}
+				],
+				"policy": {
+					"elapsedTimeMetric": {},
+					"cancelAfter": {}
+				},
+				"parameters": {
+					"containerName": {
+						"type": "string",
+						"defaultValue": "dev"
+					},
+					"storageName": {
+						"type": "string",
+						"defaultValue": "datastoresfd"
+					}
+				},
+				"annotations": []
+			},
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/LS_AzureDatabricks')]",
+				"[concat(variables('factoryId'), '/dataflows/SilverLayerToSQLTable')]"
+			]
+		},
+		{
 			"name": "[concat(parameters('factoryName'), '/Get Country Codes of EU Countries')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
@@ -796,11 +1089,46 @@
 								}
 							}
 						}
+					},
+					{
+						"name": "Execute Silver layer",
+						"type": "ExecutePipeline",
+						"dependsOn": [
+							{
+								"activity": "Create Bronze Layer",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
+						"userProperties": [],
+						"typeProperties": {
+							"pipeline": {
+								"referenceName": "Silver Layer",
+								"type": "PipelineReference"
+							},
+							"waitOnCompletion": true,
+							"parameters": {
+								"containerName": {
+									"value": "@variables('var_containerName')",
+									"type": "Expression"
+								},
+								"storageName": {
+									"value": "@pipeline().parameters.StorageName",
+									"type": "Expression"
+								}
+							}
+						}
 					}
 				],
 				"policy": {
 					"elapsedTimeMetric": {},
 					"cancelAfter": {}
+				},
+				"parameters": {
+					"StorageName": {
+						"type": "string"
+					}
 				},
 				"variables": {
 					"var_containerName": {
@@ -813,7 +1141,8 @@
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/datasets/DS_webData')]",
 				"[concat(variables('factoryId'), '/datasets/DS_datalake')]",
-				"[concat(variables('factoryId'), '/pipelines/InputData To Bronze Layer')]"
+				"[concat(variables('factoryId'), '/pipelines/InputData To Bronze Layer')]",
+				"[concat(variables('factoryId'), '/pipelines/Silver Layer')]"
 			]
 		}
 	]
