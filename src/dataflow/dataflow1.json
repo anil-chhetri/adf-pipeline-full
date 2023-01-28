@@ -5,14 +5,43 @@
 		"typeProperties": {
 			"sources": [
 				{
+					"linkedService": {
+						"referenceName": "LS_delta_table",
+						"type": "LinkedServiceReference"
+					},
 					"name": "source1"
 				}
 			],
 			"sinks": [],
 			"transformations": [],
 			"scriptLines": [
-				"source(allowSchemaDrift: true,",
-				"     validateSchema: false) ~> source1"
+				"parameters{",
+				"     ContainerName as string (\"uat\")",
+				"}",
+				"source(output(",
+				"          File_date as date,",
+				"          record_id as string,",
+				"          customer_type as string,",
+				"          transaction_date as date,",
+				"          posting_date as date,",
+				"          transaction_amount as string,",
+				"          Description_text as string,",
+				"          original_description_text as string,",
+				"          country_code as string,",
+				"          EU_flag as integer,",
+				"          age_band as string,",
+				"          gender_code as string,",
+				"          transaction_id as string,",
+				"          customer_key as string,",
+				"          post_code as string,",
+				"          note_text as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false,",
+				"     format: 'delta',",
+				"     fileSystem: 'uat',",
+				"     folderPath: 'Silver') ~> source1"
 			]
 		}
 	}
