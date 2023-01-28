@@ -157,7 +157,7 @@
 							"type": "Expression"
 						},
 						"storageName": {
-							"value": "@pipeline().parameters.StorageName",
+							"value": "@pipeline().globalParameters.StorageAccount",
 							"type": "Expression"
 						}
 					}
