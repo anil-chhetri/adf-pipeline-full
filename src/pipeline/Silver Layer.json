@@ -3,15 +3,102 @@
 	"properties": {
 		"activities": [
 			{
-				"name": "Wait1",
-				"type": "Wait",
+				"name": "Notebook1",
+				"type": "DatabricksNotebook",
 				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
 				"userProperties": [],
 				"typeProperties": {
-					"waitTimeInSeconds": 1
+					"notebookPath": "/Users/220282033@aston.ac.uk/SilverLayer",
+					"baseParameters": {
+						"containerName": {
+							"value": "@pipeline().parameters.containerName",
+							"type": "Expression"
+						},
+						"storageAccountName": {
+							"value": "@pipeline().parameters.storageName",
+							"type": "Expression"
+						}
+					}
+				},
+				"linkedServiceName": {
+					"referenceName": "LS_AzureDatabricks",
+					"type": "LinkedServiceReference"
+				}
+			},
+			{
+				"name": "If Condition1",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Notebook1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(activity('Notebook1').output.runOutput.success, 0)",
+						"type": "Expression"
+					},
+					"ifFalseActivities": [
+						{
+							"name": "Data flow1",
+							"type": "ExecuteDataFlow",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"compute": {
+									"coreCount": 8,
+									"computeType": "General"
+								},
+								"traceLevel": "Fine"
+							}
+						}
+					],
+					"ifTrueActivities": [
+						{
+							"name": "Something went wrong in Notebook",
+							"type": "Fail",
+							"dependsOn": [],
+							"userProperties": [],
+							"typeProperties": {
+								"message": {
+									"value": "@join(activity('Notebook1').output.runOutput.errorMessage, ',')",
+									"type": "Expression"
+								},
+								"errorCode": "1"
+							}
+						}
+					]
 				}
 			}
 		],
+		"parameters": {
+			"containerName": {
+				"type": "string",
+				"defaultValue": "dev"
+			},
+			"storageName": {
+				"type": "string",
+				"defaultValue": "datastoresfd"
+			}
+		},
 		"annotations": []
 	}
 }
