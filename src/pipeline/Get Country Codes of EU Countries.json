@@ -148,6 +148,10 @@
 						"containerName": {
 							"value": "@variables('var_containerName')",
 							"type": "Expression"
+						},
+						"storageName": {
+							"value": "@pipeline().parameters.StorageName",
+							"type": "Expression"
 						}
 					}
 				}
