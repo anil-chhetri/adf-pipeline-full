@@ -6,7 +6,7 @@
 			"sources": [
 				{
 					"linkedService": {
-						"referenceName": "LS_delta_table",
+						"referenceName": "LS_DataLake",
 						"type": "LinkedServiceReference"
 					},
 					"name": "source1"

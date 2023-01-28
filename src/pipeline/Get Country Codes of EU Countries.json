@@ -90,7 +90,14 @@
 			{
 				"name": "set ConatinerName Variable",
 				"type": "SetVariable",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set StorageAccount Name",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "var_containerName",
@@ -155,15 +162,26 @@
 						}
 					}
 				}
+			},
+			{
+				"name": "Set StorageAccount Name",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var_storageAccountName",
+					"value": {
+						"value": "@pipeline().globalParameters.StorageAccount",
+						"type": "Expression"
+					}
+				}
 			}
 		],
-		"parameters": {
-			"StorageName": {
-				"type": "string"
-			}
-		},
 		"variables": {
 			"var_containerName": {
+				"type": "String"
+			},
+			"var_storageAccountName": {
 				"type": "String"
 			}
 		},
