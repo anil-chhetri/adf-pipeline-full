@@ -793,7 +793,7 @@
 						"     validateSchema: false,",
 						"     ignoreNoFilesFound: false,",
 						"     format: 'delta',",
-						"     fileSystem: 'uat',",
+						"     fileSystem: ($ContainerName),",
 						"     folderPath: 'Silver') ~> source1",
 						"source1 sink(allowSchemaDrift: true,",
 						"     validateSchema: false,",
