@@ -56,8 +56,9 @@
 				"     insertable:true,",
 				"     updateable:false,",
 				"     upsertable:false,",
-				"     recreate:true,",
 				"     format: 'table',",
+				"     batchSize: 5000,",
+				"     preSQLs:['drop table if exists dbo.inputTestData\\ncreate table dbo.inputTestData\\n(\\n     file_date date\\n     , record_id nvarchar(100)\\n     , customer_type nvarchar(100)\\n     , transaction_date date\\n     , posting_date date\\n     , transaction_amount nvarchar(100)\\n     , description_text nvarchar(100)\\n     , original_description_text nvarchar(100)\\n     , country_code nvarchar(4)\\n     , EU_flag int\\n     , age_band nvarchar(10)\\n     , gender_code nvarchar(1)\\n     , transaction_id nvarchar(50)\\n     , customer_key nvarchar(50)\\n     , post_code nvarchar(10)\\n     , note_text nvarchar(50)\\n)'],",
 				"     skipDuplicateMapInputs: true,",
 				"     skipDuplicateMapOutputs: true,",
 				"     errorHandlingOption: 'stopOnFirstError') ~> sink1"
