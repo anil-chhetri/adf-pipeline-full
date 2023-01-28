@@ -168,7 +168,25 @@
 						"type": "DelimitedTextSource",
 						"additionalColumns": [
 							{
-								"value": "$$FILEPATH"
+								"name": "Date",
+								"value": {
+									"value": "@utcnow()",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "PipelineName",
+								"value": {
+									"value": "@pipeline().Pipeline",
+									"type": "Expression"
+								}
+							},
+							{
+								"name": "factoryName",
+								"value": {
+									"value": "@pipeline().DataFactory",
+									"type": "Expression"
+								}
 							}
 						],
 						"storeSettings": {
@@ -216,7 +234,7 @@
 				],
 				"outputs": [
 					{
-						"referenceName": "DS_inputLayer",
+						"referenceName": "DelimitedText1",
 						"type": "DatasetReference"
 					}
 				]
@@ -238,6 +256,11 @@
 				}
 			}
 		],
+		"variables": {
+			"var_containerName": {
+				"type": "String"
+			}
+		},
 		"annotations": [],
 		"lastPublishTime": "2023-01-27T11:24:59Z"
 	},
