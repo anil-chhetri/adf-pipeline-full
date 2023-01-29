@@ -1,7 +1,7 @@
 {
 	"Environment": {
 		"type": "string",
-		"value": "dev"
+		"value": "test"
 	},
 	"StorageAccount": {
 		"type": "string",

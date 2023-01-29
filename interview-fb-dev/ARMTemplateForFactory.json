@@ -22,7 +22,7 @@
 		},
 		"default_properties_Environment_value": {
 			"type": "string",
-			"defaultValue": "dev"
+			"defaultValue": "test"
 		},
 		"default_properties_StorageAccount_value": {
 			"type": "string",
@@ -756,7 +756,11 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "LS_SQL_database",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"DatabaseName": "fbtest",
+						"ServerName": "fbserverint.database.windows.net"
+					}
 				},
 				"annotations": [],
 				"type": "AzureSqlTable",

@@ -22,7 +22,7 @@
 		},
 		"default_properties_Environment_value": {
 			"type": "string",
-			"defaultValue": "dev"
+			"defaultValue": "test"
 		},
 		"default_properties_StorageAccount_value": {
 			"type": "string",
