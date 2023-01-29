@@ -26,6 +26,10 @@
 								"type": "Expression"
 							},
 							"StorageAccount": {
+								"value": "@pipeline().globalParameters.StorageAccount",
+								"type": "Expression"
+							},
+							"StorageAccountURL": {
 								"value": "@pipeline().globalParameters.StorageAccountURL",
 								"type": "Expression"
 							}
@@ -281,6 +285,10 @@
 										"StorageAccount": {
 											"value": "@pipeline().globalParameters.StorageAccountURL",
 											"type": "Expression"
+										},
+										"StorageAccountURL": {
+											"value": "@pipeline().globalParameters.StorageAccountURL",
+											"type": "Expression"
 										}
 									}
 								}
@@ -337,6 +345,10 @@
 										},
 										"StorageAccount": {
 											"value": "@pipeline().globalParameters.StorageAccount",
+											"type": "Expression"
+										},
+										"StorageAccountURL": {
+											"value": "@pipeline().globalParameters.StorageAccountURL",
 											"type": "Expression"
 										}
 									}
