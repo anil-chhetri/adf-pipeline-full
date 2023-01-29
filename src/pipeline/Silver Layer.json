@@ -29,7 +29,11 @@
 				},
 				"linkedServiceName": {
 					"referenceName": "LS_AzureDatabricks",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"DatabricksResourceID": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf",
+						"DatabricksURL": "https://adb-5449257985605423.3.azuredatabricks.net"
+					}
 				}
 			},
 			{
@@ -68,6 +72,13 @@
 									"type": "DataFlowReference",
 									"parameters": {
 										"ContainerName": "\"uat\""
+									},
+									"linkedServiceParameters": {
+										"source1": {
+											"linkedService": {
+												"StorageAccountURL": "https://datastoresfd.dfs.core.windows.net/"
+											}
+										}
 									}
 								},
 								"compute": {
