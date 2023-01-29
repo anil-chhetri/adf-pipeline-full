@@ -13,6 +13,10 @@
 			"StorageAccountURL": {
 				"type": "string",
 				"value": "https://datastoresfd.dfs.core.windows.net/"
+			},
+			"DatabricksURL": {
+				"type": "string",
+				"value": "https://adb-5449257985605423.3.azuredatabricks.net"
 			}
 		}
 	},
