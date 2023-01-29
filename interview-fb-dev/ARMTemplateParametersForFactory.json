@@ -5,20 +5,11 @@
 		"factoryName": {
 			"value": "interview-fb-dev"
 		},
-		"LS_AzureDatabricks_accessToken": {
-			"value": ""
-		},
-		"LS_DataLake_accountKey": {
-			"value": ""
-		},
 		"LS_SQL_database_connectionString": {
 			"value": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=@{linkedService().ServerName};Initial Catalog=@{linkedService().DatabaseName}"
 		},
-		"LS_AzureDatabricks_properties_typeProperties_existingClusterId": {
-			"value": "0127-134427-xdty1m2"
-		},
 		"LS_DataLake_properties_typeProperties_url": {
-			"value": "https://datastoresfd.dfs.core.windows.net/"
+			"value": "@{linkedService().StorageAccountURL}"
 		},
 		"LS_webdata_properties_typeProperties_url": {
 			"value": "https://restcountries.com/v3.1/region/europe"

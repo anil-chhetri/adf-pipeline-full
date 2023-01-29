@@ -7,26 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "interview-fb-dev"
 		},
-		"LS_AzureDatabricks_accessToken": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accessToken' of 'LS_AzureDatabricks'"
-		},
-		"LS_DataLake_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_DataLake'"
-		},
 		"LS_SQL_database_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_SQL_database'",
 			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=@{linkedService().ServerName};Initial Catalog=@{linkedService().DatabaseName}"
 		},
-		"LS_AzureDatabricks_properties_typeProperties_existingClusterId": {
-			"type": "string",
-			"defaultValue": "0127-134427-xdty1m2"
-		},
 		"LS_DataLake_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
+			"defaultValue": "@{linkedService().StorageAccountURL}"
 		},
 		"LS_webdata_properties_typeProperties_url": {
 			"type": "string",
@@ -988,35 +976,64 @@
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"parameters": {
+					"DatabricksResourceID": {
+						"type": "String",
+						"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
+					},
+					"DatabricksURL": {
+						"type": "String",
+						"defaultValue": "https://adb-5449257985605423.3.azuredatabricks.net"
+					}
+				},
 				"annotations": [],
 				"type": "AzureDatabricks",
 				"typeProperties": {
-					"domain": "https://adb-7002924921230225.5.azuredatabricks.net",
-					"accessToken": {
-						"type": "SecureString",
-						"value": "[parameters('LS_AzureDatabricks_accessToken')]"
+					"domain": "@linkedService().DatabricksURL",
+					"authentication": "MSI",
+					"workspaceResourceId": "@linkedService().DatabricksResourceID",
+					"credential": {
+						"referenceName": "ManagedIdentitySQLDatabase",
+						"type": "CredentialReference"
 					},
-					"existingClusterId": "[parameters('LS_AzureDatabricks_properties_typeProperties_existingClusterId')]"
+					"newClusterNodeType": "Standard_D4d_v4",
+					"newClusterNumOfWorker": "1",
+					"newClusterSparkEnvVars": {
+						"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+					},
+					"newClusterVersion": "10.4.x-scala2.12",
+					"newClusterInitScripts": [],
+					"clusterOption": "Fixed"
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/credentials/ManagedIdentitySQLDatabase')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/LS_DataLake')]",
 			"type": "Microsoft.DataFactory/factories/linkedServices",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"parameters": {
+					"StorageAccountURL": {
+						"type": "String",
+						"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
+					}
+				},
 				"annotations": [],
 				"type": "AzureBlobFS",
 				"typeProperties": {
 					"url": "[parameters('LS_DataLake_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('LS_DataLake_accountKey')]"
+					"credential": {
+						"referenceName": "ManagedIdentitySQLDatabase",
+						"type": "CredentialReference"
 					}
 				}
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/credentials/ManagedIdentitySQLDatabase')]"
+			]
 		},
 		{
 			"name": "[concat(parameters('factoryName'), '/LS_SQL_database')]",

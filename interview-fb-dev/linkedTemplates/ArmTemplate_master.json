@@ -7,26 +7,14 @@
 			"metadata": "Data Factory name",
 			"defaultValue": "interview-fb-dev"
 		},
-		"LS_AzureDatabricks_accessToken": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accessToken' of 'LS_AzureDatabricks'"
-		},
-		"LS_DataLake_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'LS_DataLake'"
-		},
 		"LS_SQL_database_connectionString": {
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'LS_SQL_database'",
 			"defaultValue": "Integrated Security=False;Encrypt=True;Connection Timeout=30;Data Source=@{linkedService().ServerName};Initial Catalog=@{linkedService().DatabaseName}"
 		},
-		"LS_AzureDatabricks_properties_typeProperties_existingClusterId": {
-			"type": "string",
-			"defaultValue": "0127-134427-xdty1m2"
-		},
 		"LS_DataLake_properties_typeProperties_url": {
 			"type": "string",
-			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
+			"defaultValue": "@{linkedService().StorageAccountURL}"
 		},
 		"LS_webdata_properties_typeProperties_url": {
 			"type": "string",
@@ -67,12 +55,6 @@
 					"factoryName": {
 						"value": "[parameters('factoryName')]"
 					},
-					"LS_AzureDatabricks_accessToken": {
-						"value": "[parameters('LS_AzureDatabricks_accessToken')]"
-					},
-					"LS_DataLake_accountKey": {
-						"value": "[parameters('LS_DataLake_accountKey')]"
-					},
 					"LS_SQL_database_connectionString": {
 						"value": "[parameters('LS_SQL_database_connectionString')]"
 					},
@@ -82,14 +64,11 @@
 					"default_properties_StorageAccount_value": {
 						"value": "[parameters('default_properties_StorageAccount_value')]"
 					},
-					"LS_AzureDatabricks_properties_typeProperties_existingClusterId": {
-						"value": "[parameters('LS_AzureDatabricks_properties_typeProperties_existingClusterId')]"
+					"LS_webdata_properties_typeProperties_url": {
+						"value": "[parameters('LS_webdata_properties_typeProperties_url')]"
 					},
 					"LS_DataLake_properties_typeProperties_url": {
 						"value": "[parameters('LS_DataLake_properties_typeProperties_url')]"
-					},
-					"LS_webdata_properties_typeProperties_url": {
-						"value": "[parameters('LS_webdata_properties_typeProperties_url')]"
 					}
 				}
 			},
