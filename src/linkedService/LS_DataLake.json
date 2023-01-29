@@ -1,10 +1,16 @@
 {
 	"name": "LS_DataLake",
 	"properties": {
+		"parameters": {
+			"StorageAccountURL": {
+				"type": "String",
+				"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
+			}
+		},
 		"annotations": [],
 		"type": "AzureBlobFS",
 		"typeProperties": {
-			"url": "https://datastoresfd.dfs.core.windows.net/",
+			"url": "@{linkedService().StorageAccountURL}",
 			"credential": {
 				"referenceName": "ManagedIdentitySQLDatabase",
 				"type": "CredentialReference"
