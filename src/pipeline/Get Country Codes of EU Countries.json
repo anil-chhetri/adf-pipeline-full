@@ -82,6 +82,10 @@
 							"ContainerName": {
 								"value": "@variables('var_containerName')",
 								"type": "Expression"
+							},
+							"StorageAccountURL": {
+								"value": "@pipeline().globalParameters.StorageAccountURL",
+								"type": "Expression"
 							}
 						}
 					}

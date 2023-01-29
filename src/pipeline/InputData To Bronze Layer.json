@@ -273,6 +273,10 @@
 										"ContainerName": {
 											"value": "@pipeline().parameters.ContainerName",
 											"type": "Expression"
+										},
+										"StorageAccount": {
+											"value": "@pipeline().globalParameters.StorageAccountURL",
+											"type": "Expression"
 										}
 									}
 								}
