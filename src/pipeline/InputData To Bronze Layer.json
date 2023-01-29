@@ -303,7 +303,7 @@
 											"type": "Expression"
 										},
 										"StorageAccountURL": {
-											"value": "@pipeline().globalParameters.StorageAccount",
+											"value": "@pipeline().globalParameters.StorageAccountURL",
 											"type": "Expression"
 										}
 									}
