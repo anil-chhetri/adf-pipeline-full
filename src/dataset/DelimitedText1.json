@@ -3,7 +3,18 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_DataLake",
-			"type": "LinkedServiceReference"
+			"type": "LinkedServiceReference",
+			"parameters": {
+				"StorageAccountURL": {
+					"value": "@dataset().StorageAccountURL",
+					"type": "Expression"
+				}
+			}
+		},
+		"parameters": {
+			"StorageAccountURL": {
+				"type": "String"
+			}
 		},
 		"annotations": [],
 		"type": "DelimitedText",

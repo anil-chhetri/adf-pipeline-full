@@ -166,12 +166,32 @@
 			{
 				"name": "Set StorageAccount Name",
 				"type": "SetVariable",
-				"dependsOn": [],
+				"dependsOn": [
+					{
+						"activity": "Set Storage Account URL",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
 				"userProperties": [],
 				"typeProperties": {
 					"variableName": "var_storageAccountName",
 					"value": {
 						"value": "@pipeline().globalParameters.StorageAccount",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set Storage Account URL",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var_storageAccountURL",
+					"value": {
+						"value": "@pipeline().globalParameters.StorageAccountURL",
 						"type": "Expression"
 					}
 				}
@@ -182,6 +202,9 @@
 				"type": "String"
 			},
 			"var_storageAccountName": {
+				"type": "String"
+			},
+			"var_storageAccountURL": {
 				"type": "String"
 			}
 		},
