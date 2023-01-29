@@ -348,7 +348,7 @@
 					"type": "LinkedServiceReference",
 					"parameters": {
 						"StorageAccountURL": {
-							"value": "@dataset().StorageAccount",
+							"value": "@dataset().StorageAccountURL",
 							"type": "Expression"
 						}
 					}
@@ -361,6 +361,9 @@
 						"type": "String"
 					},
 					"StorageAccount": {
+						"type": "String"
+					},
+					"StorageAccountURL": {
 						"type": "String"
 					}
 				},
@@ -460,6 +463,10 @@
 									},
 									"StorageAccount": {
 										"value": "@pipeline().globalParameters.StorageAccount",
+										"type": "Expression"
+									},
+									"StorageAccountURL": {
+										"value": "@pipeline().globalParameters.StorageAccountURL",
 										"type": "Expression"
 									}
 								}
@@ -714,6 +721,10 @@
 												"StorageAccount": {
 													"value": "@pipeline().globalParameters.StorageAccountURL",
 													"type": "Expression"
+												},
+												"StorageAccountURL": {
+													"value": "@pipeline().globalParameters.StorageAccountURL",
+													"type": "Expression"
 												}
 											}
 										}
@@ -728,7 +739,7 @@
 													"type": "Expression"
 												},
 												"StorageAccountURL": {
-													"value": "@pipeline().globalParameters.StorageAccount",
+													"value": "@pipeline().globalParameters.StorageAccountURL",
 													"type": "Expression"
 												}
 											}
@@ -770,6 +781,10 @@
 												},
 												"StorageAccount": {
 													"value": "@pipeline().globalParameters.StorageAccount",
+													"type": "Expression"
+												},
+												"StorageAccountURL": {
+													"value": "@pipeline().globalParameters.StorageAccountURL",
 													"type": "Expression"
 												}
 											}
@@ -1217,32 +1232,12 @@
 					{
 						"name": "Set StorageAccount Name",
 						"type": "SetVariable",
-						"dependsOn": [
-							{
-								"activity": "Set Storage Account URL",
-								"dependencyConditions": [
-									"Succeeded"
-								]
-							}
-						],
+						"dependsOn": [],
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "var_storageAccountName",
 							"value": {
 								"value": "@pipeline().globalParameters.StorageAccount",
-								"type": "Expression"
-							}
-						}
-					},
-					{
-						"name": "Set Storage Account URL",
-						"type": "SetVariable",
-						"dependsOn": [],
-						"userProperties": [],
-						"typeProperties": {
-							"variableName": "var_storageAccountURL",
-							"value": {
-								"value": "@pipeline().globalParameters.StorageAccountURL",
 								"type": "Expression"
 							}
 						}
