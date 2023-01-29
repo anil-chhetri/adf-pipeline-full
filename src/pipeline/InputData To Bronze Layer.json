@@ -20,9 +20,13 @@
 						"referenceName": "DS_inputLayer",
 						"type": "DatasetReference",
 						"parameters": {
-							"FileName": " ",
+							"FileName": "  ",
 							"ContainerName": {
 								"value": "@pipeline().parameters.ContainerName",
+								"type": "Expression"
+							},
+							"StorageAccount": {
+								"value": "@pipeline().globalParameters.StorageAccount",
 								"type": "Expression"
 							}
 						}
@@ -289,6 +293,10 @@
 										"ContainerName": {
 											"value": "@pipeline().parameters.ContainerName",
 											"type": "Expression"
+										},
+										"StorageAccountURL": {
+											"value": "@pipeline().globalParameters.StorageAccount",
+											"type": "Expression"
 										}
 									}
 								}
@@ -325,6 +333,10 @@
 										},
 										"ContainerName": {
 											"value": "@pipeline().globalParameters.Environment",
+											"type": "Expression"
+										},
+										"StorageAccount": {
+											"value": "@pipeline().globalParameters.StorageAccount",
 											"type": "Expression"
 										}
 									}
