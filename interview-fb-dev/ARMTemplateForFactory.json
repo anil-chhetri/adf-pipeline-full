@@ -27,6 +27,18 @@
 		"default_properties_StorageAccount_value": {
 			"type": "string",
 			"defaultValue": "datastoresfd"
+		},
+		"default_properties_StorageAccountURL_value": {
+			"type": "string",
+			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
+		},
+		"default_properties_DatabricksURL_value": {
+			"type": "string",
+			"defaultValue": "https://adb-5449257985605423.3.azuredatabricks.net"
+		},
+		"default_properties_DatabricksResourceID_value": {
+			"type": "string",
+			"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
 		}
 	},
 	"variables": {
@@ -120,6 +132,10 @@
 									"ContainerName": {
 										"value": "@variables('var_containerName')",
 										"type": "Expression"
+									},
+									"StorageAccountURL": {
+										"value": "@pipeline().globalParameters.StorageAccountURL",
+										"type": "Expression"
 									}
 								}
 							}
@@ -204,12 +220,32 @@
 					{
 						"name": "Set StorageAccount Name",
 						"type": "SetVariable",
-						"dependsOn": [],
+						"dependsOn": [
+							{
+								"activity": "Set Storage Account URL",
+								"dependencyConditions": [
+									"Succeeded"
+								]
+							}
+						],
 						"userProperties": [],
 						"typeProperties": {
 							"variableName": "var_storageAccountName",
 							"value": {
 								"value": "@pipeline().globalParameters.StorageAccount",
+								"type": "Expression"
+							}
+						}
+					},
+					{
+						"name": "Set Storage Account URL",
+						"type": "SetVariable",
+						"dependsOn": [],
+						"userProperties": [],
+						"typeProperties": {
+							"variableName": "var_storageAccountURL",
+							"value": {
+								"value": "@pipeline().globalParameters.StorageAccountURL",
 								"type": "Expression"
 							}
 						}
@@ -224,6 +260,9 @@
 						"type": "String"
 					},
 					"var_storageAccountName": {
+						"type": "String"
+					},
+					"var_storageAccountURL": {
 						"type": "String"
 					}
 				},
@@ -261,9 +300,13 @@
 								"referenceName": "DS_inputLayer",
 								"type": "DatasetReference",
 								"parameters": {
-									"FileName": " ",
+									"FileName": "  ",
 									"ContainerName": {
 										"value": "@pipeline().parameters.ContainerName",
+										"type": "Expression"
+									},
+									"StorageAccount": {
+										"value": "@pipeline().globalParameters.StorageAccount",
 										"type": "Expression"
 									}
 								}
@@ -514,6 +557,10 @@
 												"ContainerName": {
 													"value": "@pipeline().parameters.ContainerName",
 													"type": "Expression"
+												},
+												"StorageAccount": {
+													"value": "@pipeline().globalParameters.StorageAccountURL",
+													"type": "Expression"
 												}
 											}
 										}
@@ -525,6 +572,10 @@
 											"parameters": {
 												"ContainerName": {
 													"value": "@pipeline().parameters.ContainerName",
+													"type": "Expression"
+												},
+												"StorageAccountURL": {
+													"value": "@pipeline().globalParameters.StorageAccount",
 													"type": "Expression"
 												}
 											}
@@ -562,6 +613,10 @@
 												},
 												"ContainerName": {
 													"value": "@pipeline().globalParameters.Environment",
+													"type": "Expression"
+												},
+												"StorageAccount": {
+													"value": "@pipeline().globalParameters.StorageAccount",
 													"type": "Expression"
 												}
 											}
@@ -656,7 +711,11 @@
 						},
 						"linkedServiceName": {
 							"referenceName": "LS_AzureDatabricks",
-							"type": "LinkedServiceReference"
+							"type": "LinkedServiceReference",
+							"parameters": {
+								"DatabricksResourceID": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf",
+								"DatabricksURL": "https://adb-5449257985605423.3.azuredatabricks.net"
+							}
 						}
 					},
 					{
@@ -699,6 +758,13 @@
 											"datasetParameters": {
 												"source1": {},
 												"sink1": {}
+											},
+											"linkedServiceParameters": {
+												"source1": {
+													"linkedService": {
+														"StorageAccountURL": "https://datastoresfd.dfs.core.windows.net/"
+													}
+												}
 											}
 										},
 										"staging": {},
@@ -781,10 +847,19 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "LS_DataLake",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"StorageAccountURL": {
+							"value": "@dataset().StorageAccountURL",
+							"type": "Expression"
+						}
+					}
 				},
 				"parameters": {
 					"ContainerName": {
+						"type": "String"
+					},
+					"StorageAccountURL": {
 						"type": "String"
 					}
 				},
@@ -814,10 +889,19 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "LS_DataLake",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"StorageAccountURL": {
+							"value": "@dataset().StorageAccountURL",
+							"type": "Expression"
+						}
+					}
 				},
 				"parameters": {
 					"ContainerName": {
+						"type": "String"
+					},
+					"StorageAccountURL": {
 						"type": "String"
 					}
 				},
@@ -851,13 +935,22 @@
 			"properties": {
 				"linkedServiceName": {
 					"referenceName": "LS_DataLake",
-					"type": "LinkedServiceReference"
+					"type": "LinkedServiceReference",
+					"parameters": {
+						"StorageAccountURL": {
+							"value": "@dataset().StorageAccount",
+							"type": "Expression"
+						}
+					}
 				},
 				"parameters": {
 					"FileName": {
 						"type": "String"
 					},
 					"ContainerName": {
+						"type": "String"
+					},
+					"StorageAccount": {
 						"type": "String"
 					}
 				},
@@ -946,33 +1039,6 @@
 			},
 			"dependsOn": [
 				"[concat(variables('factoryId'), '/linkedServices/LS_webdata')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "LS_DataLake",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobFSLocation",
-						"fileSystem": "uat"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": []
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/LS_DataLake')]"
 			]
 		},
 		{
@@ -1191,6 +1257,18 @@
 				"StorageAccount": {
 					"type": "string",
 					"value": "[parameters('default_properties_StorageAccount_value')]"
+				},
+				"StorageAccountURL": {
+					"type": "string",
+					"value": "[parameters('default_properties_StorageAccountURL_value')]"
+				},
+				"DatabricksURL": {
+					"type": "string",
+					"value": "[parameters('default_properties_DatabricksURL_value')]"
+				},
+				"DatabricksResourceID": {
+					"type": "string",
+					"value": "[parameters('default_properties_DatabricksResourceID_value')]"
 				}
 			},
 			"dependsOn": []

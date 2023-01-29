@@ -28,6 +28,18 @@
 			"type": "string",
 			"defaultValue": "datastoresfd"
 		},
+		"default_properties_StorageAccountURL_value": {
+			"type": "string",
+			"defaultValue": "https://datastoresfd.dfs.core.windows.net/"
+		},
+		"default_properties_DatabricksURL_value": {
+			"type": "string",
+			"defaultValue": "https://adb-5449257985605423.3.azuredatabricks.net"
+		},
+		"default_properties_DatabricksResourceID_value": {
+			"type": "string",
+			"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
+		},
 		"containerUri": {
 			"type": "string",
 			"metadata": "URI to storage account containing linked ARM templates"
@@ -63,6 +75,15 @@
 					},
 					"default_properties_StorageAccount_value": {
 						"value": "[parameters('default_properties_StorageAccount_value')]"
+					},
+					"default_properties_StorageAccountURL_value": {
+						"value": "[parameters('default_properties_StorageAccountURL_value')]"
+					},
+					"default_properties_DatabricksURL_value": {
+						"value": "[parameters('default_properties_DatabricksURL_value')]"
+					},
+					"default_properties_DatabricksResourceID_value": {
+						"value": "[parameters('default_properties_DatabricksResourceID_value')]"
 					},
 					"LS_webdata_properties_typeProperties_url": {
 						"value": "[parameters('LS_webdata_properties_typeProperties_url')]"
