@@ -4,7 +4,7 @@
 		"parameters": {
 			"DatabricksResourceID": {
 				"type": "String",
-				"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
+				"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
 			},
 			"DatabricksURL": {
 				"type": "String",
