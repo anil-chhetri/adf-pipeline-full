@@ -1,0 +1,9 @@
+{
+	"name": "factory-adf-fb",
+	"location": "uksouth",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "387dfb7c-21e9-4ef4-8b09-7772a7bca648",
+		"tenantId": "a085950c-4c25-44d5-945a-b852fa44a221"
+	}
+}
