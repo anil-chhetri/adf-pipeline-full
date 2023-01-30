@@ -27,7 +27,7 @@
 			"value": "https://adb-5449257985605423.3.azuredatabricks.net"
 		},
 		"default_properties_DatabricksResourceID_value": {
-			"value": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
+			"value": "/subscriptions/296d4cc4-ff15-4344-8973/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
 		}
 	}
 }

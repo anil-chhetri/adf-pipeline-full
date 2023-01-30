@@ -38,7 +38,7 @@
 		},
 		"default_properties_DatabricksResourceID_value": {
 			"type": "string",
-			"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
+			"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
 		}
 	},
 	"variables": {
@@ -705,7 +705,7 @@
 							"referenceName": "LS_AzureDatabricks",
 							"type": "LinkedServiceReference",
 							"parameters": {
-								"DatabricksResourceID": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf",
+								"DatabricksResourceID": "/subscriptions/296d4cc4-ff15-4344-8973/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf",
 								"DatabricksURL": "https://adb-5449257985605423.3.azuredatabricks.net"
 							}
 						}
@@ -1044,7 +1044,7 @@
 				"parameters": {
 					"DatabricksResourceID": {
 						"type": "String",
-						"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
+						"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
 					},
 					"DatabricksURL": {
 						"type": "String",
@@ -1235,7 +1235,7 @@
 			"properties": {
 				"type": "ManagedIdentity",
 				"typeProperties": {
-					"resourceId": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourcegroups/Interviewfabledata/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adf-fb"
+					"resourceId": "/subscriptions/296d4cc4-ff15-4344-8973/resourcegroups/Interviewfabledata/providers/Microsoft.ManagedIdentity/userAssignedIdentities/adf-fb"
 				}
 			},
 			"dependsOn": []
