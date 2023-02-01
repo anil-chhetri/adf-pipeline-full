@@ -5,6 +5,10 @@
 			"Environment": {
 				"type": "string",
 				"value": "test"
+			},
+			"StorageAccount": {
+				"type": "string",
+				"value": "datastoresfd"
 			}
 		}
 	},
