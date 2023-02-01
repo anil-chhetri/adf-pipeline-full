@@ -3,10 +3,12 @@
 	"properties": {
 		"parameters": {
 			"DatabricksResourceID": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/rg-interview-fd/providers/Microsoft.KeyVault/vaults/kv-interview-fd"
 			},
 			"DatabricksURL": {
-				"type": "String"
+				"type": "String",
+				"defaultValue": "https://adb-292775851572250.10.azuredatabricks.net"
 			}
 		},
 		"annotations": [],
@@ -19,7 +21,7 @@
 				"referenceName": "ManagedIdentitySQLDatabase",
 				"type": "CredentialReference"
 			},
-			"existingClusterId": "0201-103958-ofg6lop5"
+			"existingClusterId": "0201-111926-1aswtpwe"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/linkedservices"
