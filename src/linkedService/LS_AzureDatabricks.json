@@ -3,12 +3,10 @@
 	"properties": {
 		"parameters": {
 			"DatabricksResourceID": {
-				"type": "String",
-				"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/rg-interview-fd/providers/Microsoft.KeyVault/vaults/kv-interview-fd"
+				"type": "String"
 			},
 			"DatabricksURL": {
-				"type": "String",
-				"defaultValue": "https://adb-292775851572250.10.azuredatabricks.net"
+				"type": "String"
 			}
 		},
 		"annotations": [],
