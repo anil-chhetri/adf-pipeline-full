@@ -19,14 +19,7 @@
 				"referenceName": "ManagedIdentitySQLDatabase",
 				"type": "CredentialReference"
 			},
-			"newClusterNodeType": "Standard_D4d_v4",
-			"newClusterNumOfWorker": "1",
-			"newClusterSparkEnvVars": {
-				"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
-			},
-			"newClusterVersion": "10.4.x-scala2.12",
-			"newClusterInitScripts": [],
-			"clusterOption": "Fixed"
+			"existingClusterId": "0201-103958-ofg6lop5"
 		}
 	},
 	"type": "Microsoft.DataFactory/factories/linkedservices"
