@@ -1,0 +1,17 @@
+{
+	"name": "AzureDatabricks1",
+	"properties": {
+		"annotations": [],
+		"type": "AzureDatabricks",
+		"typeProperties": {
+			"domain": "https://adb-292775851572250.10.azuredatabricks.net",
+			"authentication": "MSI",
+			"workspaceResourceId": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/rg-interview-fd/providers/Microsoft.Databricks/workspaces/fb-int-dev",
+			"credential": {
+				"referenceName": "UserMangedCred",
+				"type": "CredentialReference"
+			},
+			"existingClusterId": "0201-111926-1aswtpwe"
+		}
+	}
+}
