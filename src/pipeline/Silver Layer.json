@@ -31,8 +31,14 @@
 					"referenceName": "LS_AzureDatabricks",
 					"type": "LinkedServiceReference",
 					"parameters": {
-						"DatabricksResourceID": "/subscriptions/296d4cc4-ff15-4344-8973/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf",
-						"DatabricksURL": "https://adb-5449257985605423.3.azuredatabricks.net"
+						"DatabricksResourceID": {
+							"value": "@pipeline().globalParameters.DatabricksResourceID",
+							"type": "Expression"
+						},
+						"DatabricksURL": {
+							"value": "@pipeline().globalParameters.DatabricksURL",
+							"type": "Expression"
+						}
 					}
 				}
 			},
