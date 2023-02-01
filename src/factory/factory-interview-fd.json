@@ -9,6 +9,10 @@
 			"StorageAccount": {
 				"type": "string",
 				"value": "datastoresfd"
+			},
+			"StorageAccountURL": {
+				"type": "string",
+				"value": "https://datastoresfd.dfs.core.windows.net/"
 			}
 		}
 	},
