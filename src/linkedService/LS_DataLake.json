@@ -12,7 +12,7 @@
 		"typeProperties": {
 			"url": "@{linkedService().StorageAccountURL}",
 			"credential": {
-				"referenceName": "ManagedIdentitySQLDatabase",
+				"referenceName": "UserMangedCred",
 				"type": "CredentialReference"
 			}
 		}
