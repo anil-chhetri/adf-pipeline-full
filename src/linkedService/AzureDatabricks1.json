@@ -11,7 +11,14 @@
 				"referenceName": "UserMangedCred",
 				"type": "CredentialReference"
 			},
-			"existingClusterId": "0201-111926-1aswtpwe"
+			"newClusterNodeType": "Standard_DS3_v2",
+			"newClusterNumOfWorker": "1",
+			"newClusterSparkEnvVars": {
+				"PYSPARK_PYTHON": "/databricks/python3/bin/python3"
+			},
+			"newClusterVersion": "10.4.x-scala2.12",
+			"newClusterInitScripts": [],
+			"clusterOption": "Fixed"
 		}
 	}
 }
