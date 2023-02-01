@@ -3,11 +3,7 @@
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "LS_SQL_database",
-			"type": "LinkedServiceReference",
-			"parameters": {
-				"DatabaseName": "fbtest",
-				"ServerName": "fbserverint.database.windows.net"
-			}
+			"type": "LinkedServiceReference"
 		},
 		"annotations": [],
 		"type": "AzureSqlTable",
