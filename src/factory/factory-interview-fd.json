@@ -17,6 +17,10 @@
 			"DatabricksURL": {
 				"type": "string",
 				"value": "https://adb-2945526180877013.13.azuredatabricks.net"
+			},
+			"DatabricksResourceID": {
+				"type": "string",
+				"value": "/subscriptions/296d4cc4-ff15-4344-8973-0f580798f966/resourceGroups/rg-interview-fd/providers/Microsoft.Databricks/workspaces/db-fb-dev"
 			}
 		}
 	},
