@@ -1,0 +1,9 @@
+{
+	"name": "factory-interview-fd",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "282e3f6c-6fb0-4d54-a750-854df8b7da00",
+		"tenantId": "a085950c-4c25-44d5-945a-b852fa44a221"
+	}
+}
