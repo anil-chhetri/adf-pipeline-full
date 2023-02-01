@@ -3,12 +3,10 @@
 	"properties": {
 		"parameters": {
 			"DatabricksResourceID": {
-				"type": "String",
-				"defaultValue": "/subscriptions/296d4cc4-ff15-4344-8973/resourceGroups/Interviewfabledata/providers/Microsoft.Databricks/workspaces/fb-interview-adf"
+				"type": "String"
 			},
 			"DatabricksURL": {
-				"type": "String",
-				"defaultValue": "https://adb-5449257985605423.3.azuredatabricks.net"
+				"type": "String"
 			}
 		},
 		"annotations": [],
